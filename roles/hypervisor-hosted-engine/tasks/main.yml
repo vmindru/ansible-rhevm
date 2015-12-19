@@ -1,0 +1,6 @@
+---
+# tasks file for rhevm
+ - include: prepare.yml
+ - include: prepare_repo.yml 
+ - include: create_gluster.yml 
+ - include: install_HE.yml 

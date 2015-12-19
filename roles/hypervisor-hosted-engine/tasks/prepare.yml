@@ -1,0 +1,4 @@
+---
+# tasks file for rhevm
+ - shell: "systemctl disable firewalld && systemctl stop firewalld"
+ - shell: "systemctl disable NetworkManager && systemctl stop NetworkManager" 

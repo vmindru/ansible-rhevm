@@ -1,0 +1,50 @@
+---
+# tasks file for rhevm
+ - shell: lvs | grep {{ GlusterLvname }} 
+   ignore_errors: yes 
+   register: lvs_result
+ - name: "create LVM" 
+   lvol: vg={{ OsVgname }} lv={{ GlusterLvname }} size={{GlusterSize}} state=present
+   when: "lvs_result.rc != 0"
+ - shell: ssm add -p gluster /dev/{{ OsVgname}}/{{ GlusterLvname }}
+   when: "lvs_result.rc != 0"
+ - shell: ssm create -p gluster --fstype xfs -n gluster
+   when: "lvs_result.rc != 0"
+ - file: path={{ GlusterMountPoint }} state=directory 
+   when: "lvs_result.rc != 0"
+ - mount: name={{ GlusterMountPoint }} src='/dev/gluster/gluster' fstype=xfs state=present
+   when: "lvs_result.rc != 0"
+ - name: make sure all mount points are started 
+   shell: mount -a 
+ - file: path={{ GlusterMountPoint }}/engine/brick state=directory recurse=yes
+   when: "lvs_result.rc != 0"
+ - file: path={{ GlusterMountPoint }}/data/brick state=directory recurse=yes
+   when: "lvs_result.rc != 0"
+ - name: start service
+   service: name=glusterd state=started enabled=yes
+ - name: create Gluster Engine Volumes
+   shell: gluster volume create engine {{ ansible_fqdn }}:/gluster/engine/brick
+   when: "lvs_result.rc != 0"
+ - name: create Gluster Data Volumes 
+   shell: gluster volume create data {{ ansible_fqdn }}:/gluster/data/brick
+   when: "lvs_result.rc != 0"
+ - name: apply virt groups to volumes
+   shell: gluster volume set data  group virt
+   when: "lvs_result.rc != 0"
+ - name: apply virt groups to volumes
+   shell: gluster volume set engine group virt
+   when: "lvs_result.rc != 0"
+ - name: setup proper permissions for engine
+   shell: gluster volume set engine storage.owner-uid 36 && gluster volume set engine storage.owner-gid 36
+   when: "lvs_result.rc != 0"
+ - name: setup proper permissions for data
+   shell: gluster volume set data storage.owner-uid 36 && gluster volume set data storage.owner-gid 36 
+   when: "lvs_result.rc != 0"
+ - name: satrt engine volume
+   shell: gluster volume start engine 
+   when: "lvs_result.rc != 0"
+ - name: satrt data volume
+   shell: gluster volume start data
+   when: "lvs_result.rc != 0"
+
+

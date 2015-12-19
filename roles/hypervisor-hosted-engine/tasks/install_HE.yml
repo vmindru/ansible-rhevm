@@ -1,0 +1,6 @@
+---
+# tasks file for rhevm
+ - file: path=/home/tmp state=directory owner=36 group=36 
+ - get_url: url={{ CentOSMirror }} dest=/home/tmp
+
+ 

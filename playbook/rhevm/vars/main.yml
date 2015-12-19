@@ -1,0 +1,8 @@
+---
+ OvirtPackage: http://resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm
+ OvirtReleaseRpm: ovirt-release36.rpm
+ GlusterSize: 60G
+ GlusterLvname: gluster01
+ OsVgname: vg1
+ GlusterMountPoint: /gluster
+ CentOSMirror: http://mirror.nsc.liu.se/centos-store/6.6/isos/x86_64/CentOS-6.6-x86_64-minimal.iso
