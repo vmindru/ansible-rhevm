@@ -1,6 +1,6 @@
 ---
- OvirtPackage: http://resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm
- OvirtReleaseRpm: ovirt-release36.rpm
+ OvirtPackage: http://resources.ovirt.org/pub/yum-repo/ovirt-release35.rpm
+ OvirtReleaseRpm: ovirt-release35.rpm
  GlusterSize: 60G
  GlusterLvname: gluster01
  OsVgname: vg1
